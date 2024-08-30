@@ -4,6 +4,7 @@ import com.personal.tracker_service.model.schema.Transaction;
 import com.personal.tracker_service.service.FileParserService;
 import java.io.FileInputStream;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,13 +17,14 @@ public class TrackerServiceApplication {
     SpringApplication.run(TrackerServiceApplication.class, args);
   }
 
+  @Value("${activity.file.location}")
+  private String fileLocation;
+
   @Bean
   CommandLineRunner read(FileParserService fileReaderService) {
     return args -> {
       List<Transaction> transactions =
-          fileReaderService.parseFile(
-              new FileInputStream(
-                  "/Users/atishnaskar/Desktop/Takeout/Google Pay/My Activity/My Activity.html"));
+          fileReaderService.parseFile(new FileInputStream(fileLocation));
       transactions.forEach(System.out::println);
     };
   }
