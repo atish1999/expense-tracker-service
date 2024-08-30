@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class TransactionMetaData {
+public class PaymentMetaData {
 
   private String paymentDescription;
   private String paymentDate;

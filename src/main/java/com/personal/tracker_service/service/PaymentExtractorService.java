@@ -2,8 +2,8 @@ package com.personal.tracker_service.service;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
+import com.personal.tracker_service.model.schema.PaymentMetaData;
 import com.personal.tracker_service.model.schema.Transaction;
-import com.personal.tracker_service.model.schema.TransactionMetaData;
 import org.jsoup.nodes.Element;
 
 public interface PaymentExtractorService {
@@ -13,7 +13,7 @@ public interface PaymentExtractorService {
 
   Transaction extractPayment(String paymentDescription, String paymentDate);
 
-  static TransactionMetaData extractTransactionMetaData(Element paymentElement) {
+  static PaymentMetaData extractPaymentMetaData(Element paymentElement) {
 
     String[] transactionsMetaData = paymentElement.html().trim().split(PAYMENT_META_DATA_SPLITTER);
 
@@ -31,7 +31,7 @@ public interface PaymentExtractorService {
             .replace(COMMA_DELIMETER, EMPTY)
             .replace("Sept", "Sep")
             .trim();
-    return TransactionMetaData.builder()
+    return PaymentMetaData.builder()
         .paymentDescription(paymentDescription)
         .paymentDate(paymentDate)
         .build();

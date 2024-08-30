@@ -2,8 +2,8 @@ package com.personal.tracker_service.service.impl;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
+import com.personal.tracker_service.model.schema.PaymentMetaData;
 import com.personal.tracker_service.model.schema.Transaction;
-import com.personal.tracker_service.model.schema.TransactionMetaData;
 import com.personal.tracker_service.service.FileParserService;
 import com.personal.tracker_service.service.PaymentExtractorService;
 import java.io.InputStream;
@@ -57,15 +57,15 @@ public class HtmlFileParserService implements FileParserService {
           continue;
         }
 
-        final TransactionMetaData transactionMetaData =
-            PaymentExtractorService.extractTransactionMetaData(paymentDescriptionElement);
+        final PaymentMetaData paymentMetaData =
+            PaymentExtractorService.extractPaymentMetaData(paymentDescriptionElement);
 
-        if (Objects.nonNull(transactionMetaData)
-            && transactionMetaData.getPaymentDate().contains(prohibitedYear())) {
+        if (Objects.nonNull(paymentMetaData)
+            && paymentMetaData.getPaymentDate().contains(prohibitedYear())) {
           break;
         }
 
-        Optional.ofNullable(getTransactionFromTransactionMetaData(transactionMetaData))
+        Optional.ofNullable(getTransactionFromTransactionMetaData(paymentMetaData))
             .ifPresent(transactions::add);
       }
 
@@ -76,18 +76,17 @@ public class HtmlFileParserService implements FileParserService {
     return transactions;
   }
 
-  private Transaction getTransactionFromTransactionMetaData(
-      TransactionMetaData transactionMetaData) {
+  private Transaction getTransactionFromTransactionMetaData(final PaymentMetaData paymentMetaData) {
 
-    if (StringUtils.isEmpty(transactionMetaData.getPaymentDescription())) {
+    if (StringUtils.isEmpty(paymentMetaData.getPaymentDescription())) {
       return null;
     }
 
     String paymentType = "";
 
-    if (transactionMetaData.getPaymentDescription().toLowerCase().contains("paid")) {
+    if (paymentMetaData.getPaymentDescription().toLowerCase().contains("paid")) {
       paymentType = "PAID";
-    } else if (transactionMetaData.getPaymentDescription().toLowerCase().contains("received")) {
+    } else if (paymentMetaData.getPaymentDescription().toLowerCase().contains("received")) {
       paymentType = "RECEIVED";
     }
 
@@ -99,6 +98,6 @@ public class HtmlFileParserService implements FileParserService {
     final PaymentExtractorService paymentExtractorService =
         paymentExtractorServiceMap.get(paymentExtractorKey);
     return paymentExtractorService.extractPayment(
-        transactionMetaData.getPaymentDescription(), transactionMetaData.getPaymentDate());
+        paymentMetaData.getPaymentDescription(), paymentMetaData.getPaymentDate());
   }
 }
