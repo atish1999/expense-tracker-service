@@ -1,0 +1,6 @@
+fileignoreconfig:
+- filename: mvnw
+  checksum: 5ea54ac67a83a3113b2c18b63be2c7cd36d20a6a016b455f1a73f5722a9ed6d1
+- filename: src/main/java/com/personal/tracker_service/service/impl/HtmlFileParserService.java
+  checksum: e7c32bae3ff7a391d7ead3a9d0078ece8c2972b590fbbe727c46fdb2f97eec85
+version: "1.0"
